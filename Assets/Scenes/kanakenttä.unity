@@ -134,6 +134,7 @@ GameObject:
   - component: {fileID: 327355802}
   - component: {fileID: 327355801}
   - component: {fileID: 327355804}
+  - component: {fileID: 327355805}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -209,7 +210,7 @@ Transform:
   m_GameObject: {fileID: 327355800}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1, z: -5.12}
+  m_LocalPosition: {x: -2.0095701, y: 2.6786299, z: -1.7172801}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -259,6 +260,19 @@ MonoBehaviour:
     m_MipBias: 0
     m_VarianceClampScale: 0.9
     m_ContrastAdaptiveSharpening: 0
+--- !u!114 &327355805
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 327355800}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fd285461f0ade8e42bec415a62655bc4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  chickenObject: {fileID: 0}
 --- !u!1 &551205661
 GameObject:
   m_ObjectHideFlags: 0
@@ -413,8 +427,8 @@ Rigidbody:
   m_GameObject: {fileID: 991418590}
   serializedVersion: 4
   m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
+  m_Drag: 10
+  m_AngularDrag: 15
   m_CenterOfMass: {x: 0, y: 0, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
   m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
@@ -443,8 +457,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3c8370916d00152439b3e5edd342ab00, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 4
+  speed: 10
   physic: {fileID: 0}
+  turnSpeed: 5
 --- !u!1001 &1453832400
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -6,6 +6,7 @@ public class kananLiikutin : MonoBehaviour
 {   
     public float speed;
     public Rigidbody physic;
+    public float turnSpeed;
 
     // Start is called before the first frame update
     void Start()
@@ -28,12 +29,12 @@ public class kananLiikutin : MonoBehaviour
         }
             if(Input.GetKey("a"))
         {
-            physic.AddRelativeTorque(Vector3.down * speed);
+            physic.AddRelativeTorque(Vector3.down * turnSpeed);
 
         }
             if(Input.GetKey("d"))
         {
-            physic.AddRelativeTorque(Vector3.up * speed);
+            physic.AddRelativeTorque(Vector3.up * turnSpeed);
 
         }
     }
