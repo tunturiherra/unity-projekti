@@ -9,6 +9,7 @@ public class MoveChicken : MonoBehaviour
     public Rigidbody physic;
     public float jump;
     public bool isGrounded;
+    
 
     // Start is called before the first frame update
     void Start()
