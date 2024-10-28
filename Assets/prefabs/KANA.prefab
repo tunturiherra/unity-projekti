@@ -36,7 +36,7 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: 750998db7fd03a34d9b732aa156d66fe,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.55
+      value: 0.08
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 750998db7fd03a34d9b732aa156d66fe,
         type: 3}
@@ -171,7 +171,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3c8370916d00152439b3e5edd342ab00, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 20
+  speed: 50
   physic: {fileID: 0}
   turnSpeed: 8
-  turboSpeed: 30
+  turboSpeed: 80

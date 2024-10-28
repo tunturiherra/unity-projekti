@@ -82,7 +82,7 @@ public class kananLiikutin : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Q) && holdableItem != null)
         {
             // Laske esineen sijainti pelaajan eteen (1 metrin p��h�n pelaajasta)
-            Vector3 dropPosition = transform.TransformPoint(Vector3.forward * 1);
+            Vector3 dropPosition = transform.TransformPoint(Vector3.forward * 2);
             holdableItem.position = dropPosition;
 
             // Vapauta esine
@@ -90,6 +90,8 @@ public class kananLiikutin : MonoBehaviour
         }
     }
 
+    
+    
     void FixedUpdate()
     {
         if (wKeyPressed == true)
@@ -116,31 +118,29 @@ public class kananLiikutin : MonoBehaviour
 
     void OnCollisionEnter(Collision collision)
     {
-
         if (collision.gameObject.name == "Lattia")
         {
-            return; // Ohita lattian t�rm�ys
+            return; // Ohita lattian t�rmäys
         }
-        // Tarkistetaan, mihin objektiin t�rm�t��n
 
-        holdableItem = collision.transform;
-        Debug.Log("Osuit kohteeseen: " + holdableItem.name);
-
-        if (collision.gameObject.name == "ilmastointiteippi")
+        // Varmistetaan, ettei toinen esine ole jo nostettuna
+        if (holdableItem == null)
         {
-            Debug.Log("Osuit ilmastointiteippiin!");
-        }
-        else if (collision.gameObject.name == "tyokalupakki")
-        {
-            Debug.Log("Osuit ty�kalupakkiin!");
-        }
-        else if (collision.gameObject.name == "sorkkarauta_collider")
-        {
-            Debug.Log("Osuit sorkkarautaan!");
-        }
-        else if (collision.gameObject.name == "taskulamppu_collider")
-        {
-            Debug.Log("Osuit taskulamppuun!");
+            if (collision.gameObject.name == "ilmastointiteippi" || 
+                collision.gameObject.name == "tyokalupakki" || 
+                collision.gameObject.name == "sorkkarauta" || 
+                collision.gameObject.name == "taskulamppu")
+            {
+                holdableItem = collision.transform;
+                Debug.Log("Osuit kohteeseen: " + holdableItem.name);
+            
+                // Jos haluat varmistaa, että esine pysyy päällä, voit asettaa sen kineettiseksi
+                var rb = holdableItem.GetComponent<Rigidbody>();
+                if (rb != null)
+                {
+                    rb.isKinematic = true; // Pysyy paikoillaan eikä putoa
+                }
+            }
         }
     }
 
