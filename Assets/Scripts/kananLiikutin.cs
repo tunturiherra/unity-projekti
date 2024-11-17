@@ -1,150 +1,80 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class kananLiikutin : MonoBehaviour
+public class KananLiikutin : MonoBehaviour
 {
     [SerializeField]
-    float speed;
-    public Rigidbody physic;
+    float nopeus;
 
     [SerializeField]
-    float turnSpeed;
+    float kaantovoima;
 
     [SerializeField]
-    float turboSpeed;
+    int kokonaisluku;
 
-    private Transform holdableItem;
+    [SerializeField]
+    string teksti;
 
-    bool wKeyPressed = false;
-    bool aKeyPressed = false;
-    bool sKeyPressed = false;
-    bool dKeyPressed = false;
-    bool shiftKeyPressed = false;
+    [SerializeField]
+    bool tosi;
 
-    // Start is called before the first frame update
+    [SerializeField]
+    Rigidbody fysiikka;
+
+    [SerializeField]
+    bool hyppytehty = false;
+
+    // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        physic = GetComponent<Rigidbody>();
+        fysiikka = GetComponent<Rigidbody>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKey("w"))
+        if (Input.GetKey(KeyCode.W))
         {
-            wKeyPressed = true;
+            Debug.Log("W-nappia on painettu " + nopeus);
+            // 0, 0, 1 * 15 = 0, 0, 15
+            fysiikka.AddRelativeForce(Vector3.forward * nopeus);
         }
-        else
+        if (Input.GetKey(KeyCode.S))
         {
-            wKeyPressed = false;
+            Debug.Log("S-nappia on painettu");
+            // 0, 0, -1 * 10 = 0, 0, -10
+            fysiikka.AddRelativeForce(Vector3.forward * -nopeus);
         }
-
-        if (Input.GetKey("s"))
+        if (Input.GetKey(KeyCode.A))
         {
-            sKeyPressed = true;
+            Debug.Log("A-nappia painettu");
+            // -1, 0, 0 * 10 = -10, 0, 0
+            //fysiikka.AddForce(Vector3.left * nopeus);
+            fysiikka.AddRelativeTorque(Vector3.up * -kaantovoima);
         }
-        else
+        if (Input.GetKey(KeyCode.D))
         {
-            sKeyPressed = false;
-        }
-        if (Input.GetKey("a"))
-        {
-            aKeyPressed = true;
-        }
-        else
-        {
-            aKeyPressed = false;
-        }
-        if (Input.GetKey("d"))
-        {
-            dKeyPressed = true;
-        }
-        else
-        {
-            dKeyPressed = false;
-        }
-        if (Input.GetKey("left shift"))
-        {
-            shiftKeyPressed = true;
-        }
-        else
-        {
-            shiftKeyPressed = false;
+            Debug.Log("D-nappia painettu");
+            //fysiikka.AddForce(Vector3.right * nopeus);
+            fysiikka.AddRelativeTorque(Vector3.up * kaantovoima);
         }
 
-        if (holdableItem != null)
+        // JOS välilyöntiä on painettu
+        if( Input.GetKey(KeyCode.Space) && hyppytehty == false )
         {
-            Vector3 headPosition = transform.TransformPoint(new Vector3(0, 1, 0)); // 1.5f on arvioitu korkeus
-            holdableItem.position = headPosition; // Aseta esineen sijainti
-        }
-
-        if (Input.GetKeyDown(KeyCode.Q) && holdableItem != null)
-        {
-            // Laske esineen sijainti pelaajan eteen (1 metrin p��h�n pelaajasta)
-            Vector3 dropPosition = transform.TransformPoint(Vector3.forward * 2);
-            holdableItem.position = dropPosition;
-
-            // Vapauta esine
-            holdableItem = null;
+            // Kana hahmo pomppaa pari yksikkö ilmaan
+            Debug.Log("Space painettu");
+            fysiikka.AddForce(Vector3.up * 1000f);
+            hyppytehty = true;
         }
     }
 
-    
-    
-    void FixedUpdate()
+    private void OnCollisionEnter(Collision collision)
     {
-        if (wKeyPressed == true)
-        {
-            physic.AddRelativeForce(Vector3.forward * speed);
-        }
-        if (aKeyPressed == true)
-        {
-            physic.AddRelativeTorque(Vector3.down * turnSpeed);
-        }
-        if (sKeyPressed == true)
-        {
-            physic.AddRelativeForce(Vector3.back * speed);
-        }
-        if (dKeyPressed == true)
-        {
-            physic.AddRelativeTorque(Vector3.up * turnSpeed);
-        }
-        if (shiftKeyPressed == true)
-        {
-            physic.AddRelativeForce(Vector3.forward * turboSpeed);
-        }
+        Debug.Log("OnCollisionEnter saavutettu "+collision.gameObject.name);
+        // Kun osutaan takaisin hypyn jälkeen lattiaan,
+        // Mahdollistetaan uusi hyppy laittamalla hyppytehty muuttuja
+        // arvoon false++++++
+        hyppytehty = false;
     }
-
-    void OnCollisionEnter(Collision collision)
-    {
-        if (collision.gameObject.name == "Lattia")
-        {
-            return; // Ohita lattian t�rmäys
-        }
-
-        // Varmistetaan, ettei toinen esine ole jo nostettuna
-        if (holdableItem == null)
-        {
-            if (collision.gameObject.name == "ilmastointiteippi" || 
-                collision.gameObject.name == "tyokalupakki" || 
-                collision.gameObject.name == "sorkkarauta" || 
-                collision.gameObject.name == "taskulamppu")
-            {
-                holdableItem = collision.transform;
-                Debug.Log("Osuit kohteeseen: " + holdableItem.name);
-            
-                // Jos haluat varmistaa, että esine pysyy päällä, voit asettaa sen kineettiseksi
-                var rb = holdableItem.GetComponent<Rigidbody>();
-                if (rb != null)
-                {
-                    rb.isKinematic = true; // Pysyy paikoillaan eikä putoa
-                }
-            }
-        }
-    }
-
-
-
 
 }

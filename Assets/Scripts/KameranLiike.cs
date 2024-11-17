@@ -1,11 +1,10 @@
 using TMPro;
 using UnityEngine;
 
-public class KameranLiike : MonoBehaviour
+public class KameranLiikutus : MonoBehaviour
 {
     public GameObject kentanKana;
-
-    public TMP_Text textField;
+    public TMP_Text tekstikentta;
 
     public float kameranEtaisyys = 4f;
     public float kameranKorkeus = 2f;
@@ -13,52 +12,65 @@ public class KameranLiike : MonoBehaviour
     public float kulunutAika = 0f;
 
     Vector3 haluttuKameranPaikka;
-    
+
     [SerializeField]
     float kameranNopeus = 0.1f;
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        // Etsitään Hierarkiasta Chicken niminen GameObject
-        kentanKana = GameObject.Find("KANA");
+        kentanKana = GameObject.Find("Kananen");
 
-        GameObject TextUI = GameObject.Find("TextUI");
-        textField = TextUI.GetComponent<TMP_Text>();
-        textField.text = "Tämähän toimii!";
+        // If "Kananen" isn't found, try to find "Haamu"
+        if (kentanKana == null)
+        {
+            kentanKana = GameObject.Find("Haamu");
+            if (kentanKana == null)
+            {
+                Debug.LogError("Error: Neither 'Kananen' nor 'Haamu' was found in the scene.");
+            }
+        }
 
-        // Update is called once per frame
+        // Find and check for the TMP_Text component
+        GameObject tekstiosio = GameObject.Find("TekstiOsio");
+        if (tekstiosio != null)
+        {
+            tekstikentta = tekstiosio.GetComponent<TMP_Text>();
+            if (tekstikentta == null)
+            {
+                Debug.LogError("'TekstiOsio' found, but it has no TMP_Text component.");
+            }
+        }
+        else
+        {
+            Debug.LogError("'TekstiOsio' object not found in the scene.");
+        }
     }
+
     void Update()
     {
-        kulunutAika = kulunutAika + Time.deltaTime;
+        // Check if kentanKana is assigned before using it
+        if (kentanKana == null)
+        {
+            Debug.LogWarning("Warning: 'kentanKana' is null, skipping camera update.");
+            return;
+        }
 
-        // Kun aikaa on kulunut yli 2 sekunttia, päivitä UI teksti
+        kulunutAika += Time.deltaTime;
 
-      /*  if (kulunutAika > 2f)
+        /*
+        if (kulunutAika > 2f)
         {
             tekstikentta.text = "TÄMÄHÄN TOIMII!";
-        }*/
+        } 
+        */
 
-        
-        // kameran kiinteään paikkaan asettaminen käyttäen
-        // Vector3 luokasta tehtyä oliota
-        //  transform.position = new Vector3(10f, 5f, 3f);
-        
-    // Lasketaan haluttu kameran paikka suhteessa kanaan
-    haluttuKameranPaikka = kentanKana.transform.TransformPoint(Vector3.back * kameranEtaisyys + Vector3.up * kameranKorkeus);
-    
+        // Calculate the desired camera position
+        haluttuKameranPaikka = kentanKana.transform.TransformPoint(Vector3.back * kameranEtaisyys +
+            Vector3.up * kameranKorkeus);
 
-    // Sijoitetaan kamera paikkaan kohti haluttua paikkaa Lerpillä
-    transform.position = Vector3.Lerp(transform.position, haluttuKameranPaikka, kameranNopeus);
+        transform.position = Vector3.Lerp(transform.position, haluttuKameranPaikka, kameranNopeus);
 
-    // Kamera seuraa kanaa ja katsoo sitä
-    transform.LookAt(kentanKana.transform);
-        
-        /*transform.position = kentanKana.transform.position + 
-            Vector3.forward*kameranEtaisyys+
-            Vector3.up*kameranKorkeus;*/
-
-
+        // Make the camera look at the target object
+        transform.LookAt(kentanKana.transform);
     }
 }
